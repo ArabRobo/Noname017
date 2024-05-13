@@ -13,13 +13,14 @@ from config import (
     DISABLE_CHANNEL_BUTTON,
     FORCE_MSG,
     PROTECT_CONTENT,
+    FORCE_SUB_GROUP,
     START_MSG,
 )
 from database.sql import add_user, delete_user, full_userbase, query_msg
 from pyrogram import filters
 from pyrogram.enums import ParseMode
 from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked
-from pyrogram.types import InlineKeyboardMarkup, Message
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 
 from helper_func import decode, get_messages, subsall, subsch, subsgc
 
@@ -35,16 +36,6 @@ TIME_DURATION_UNITS = (
     ("sec", 1),
 )
 
-
-async def _human_time_duration(seconds):
-    if seconds == 0:
-        return "inf"
-    parts = []
-    for unit, div in TIME_DURATION_UNITS:
-        amount, seconds = divmod(int(seconds), div)
-        if amount > 0:
-            parts.append(f'{amount} {unit}{"" if amount == 1 else "s"}')
-    return ", ".join(parts)
 
 
 @Bot.on_message(filters.command("start") & filters.private & subsall & subsch & subsgc)
